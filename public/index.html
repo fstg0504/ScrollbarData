@@ -1,0 +1,121 @@
+﻿<!DOCTYPE>
+<html>
+<head>
+<meta charset="utf-8">
+    <title>测试</title>
+<style type="text/css">
+    body,span,p,div,td,th,a,input,textarea,select,li
+    {
+        font-family:宋体;
+        font-size:12px;
+    }
+    .table
+    {
+        border-collapse:collapse;
+        border-width:1px;
+        border-style:solid;
+        border-color:#99BBE8;
+    }
+    .table td,.table th
+    {
+        border-style:solid;
+        border-width:1px;
+        border-color:#99BBE8;
+	    color:#15428B;
+    }
+    #divDataList
+    {
+        height:260px;
+    }
+</style>
+    <script src="JsLib/Lib.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+        // 使用Lib.js。可以像C一样写JS
+        include("QTable.js");
+        
+        var dataList = [];
+        var mapList = [
+            { id: "tdID", field: "id" },    //将在tdID的表格中显示数据的id属性，以下类推
+            { id: "spData1", field: "d1" },
+            { id: "tdData2", field: "d2" },
+            { id: "tdData3", field: "d3" },
+            { id: "tdData4", field: "d4" }
+        ];
+
+        //创建一个表格控件
+        var tbl = new QTable();
+        
+        // main,入口函数，页面加载完成后会运行
+        // 该函数由window.onload调用
+        // 但同时你也可以设置其它的window.onload代码，而不会有冲突，也可以不要main()
+        function main() {
+            tbl.BindDom("divDataList"); //绑定到模板
+            tbl.setMaplist(mapList);  //设置数据映射关系
+        }
+        function InitData() {
+            for (var i = 0; i < 10000; i++) {
+                var data = { id: i, d1: "测试数据" + i, d2: "测试数据" + i, d3: "测试数据" + i, d4: "测试数据" + i };
+                dataList.push(data);
+            }
+            alert("数据初始化完成，即将加载数据");
+            tbl.BindData(dataList);
+        }
+
+        function ViewData(lnk) {
+            // 取得“查看”所在的行
+            var row = lnk.parentNode.parentNode;
+            // 由QTable生成的行，每行的data属性即为其绑定的数据
+            var data = row.data;
+            // 既然取得了数据，你爱干嘛就干嘛
+            alert(data.id);
+        }
+    </script>
+</head>
+<body>
+<input type="button" onclick="InitData()" value="开始" /> <a href="demo.rar">下载源码</a>
+<!--
+这里是表格的模板，就像在.net中要写一个表格一样，它也是有一定的格式的
+要使用QTable，请按以下格式写模板
+-->
+<!--表格模板必须以一个div为根，表格的大小由该div决定，你可以用CSS来自已设定它-->
+<div id="divDataList">
+    <!--在这个div下，有且仅有一个table，你可以自己设置其样式-->
+    <table class="table">
+        <!--最好通过col标签来设置每列的宽度，以保证布局不容易乱
+        如果不知道col是什么，请自己查参考-->
+        <col width="30"/>
+        <col/>
+        <col/>
+        <col/>
+        <col/>
+        <col width="50"/>
+        
+        <!--标题行必须放在thead中！-->
+        <thead><tr>
+            <th>ID</th>
+            <th>数据1</th>
+            <th>数据2</th>
+            <th>数据3</th>
+            <th>数据4</th>
+            <th>操作</th>
+        </tr></thead>
+        
+        <!--这里是数据行的模板，在table中有且仅有一个tbody
+        而且该tbody中有唯一的行，该行作为数据展示的模板
+        ，你可以通过CSS等任意设置你喜欢的样式-->
+        <tbody><tr>
+            <td id="tdID"></td>
+            <!--在模板中，任意复杂的结构都可以
+            只要你指定好要显示数据的标签ID，以及在mapList中设置好映射关系就行了-->
+            <td><span id="spData1" style="color:Red"></span></td>
+            <td id="tdData2"></td>
+            <td id="tdData3"></td>
+            <td id="tdData4"></td>
+            <td><a href="javascript:;" onclick="ViewData(this);">查看</a></td>
+        </tr></tbody>
+    </table>
+</div>
+<!--模板结束-->
+
+</body>
+</html>
